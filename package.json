@@ -1,0 +1,27 @@
+{
+  "name": "dotx-streamdeck",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "rollup -c && node scripts/copy-static.mjs",
+    "watch": "rollup -c -w --watch.onEnd=\"node scripts/copy-static.mjs\"",
+    "validate": "streamdeck validate com.dotmatrixlabs.dotx.streamdeck.sdPlugin",
+    "package": "npm run build && streamdeck pack com.dotmatrixlabs.dotx.streamdeck.sdPlugin --output dist --force"
+  },
+  "dependencies": {
+    "@elgato/streamdeck": "^2.1.0",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@elgato/cli": "^1.7.4",
+    "@rollup/plugin-commonjs": "^28.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@types/node": "^24.10.1",
+    "rollup": "^4.53.3",
+    "typescript": "^5.9.3"
+  }
+}

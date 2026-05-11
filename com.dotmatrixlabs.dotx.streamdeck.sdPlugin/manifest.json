@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "UUID": "com.dotmatrixlabs.dotx.streamdeck",
+  "Name": "Dot X",
+  "Description": "Show Dot X channel targets and live channel percentages on Stream Deck keys.",
+  "Version": "0.1.0.0",
+  "Author": "DotMatrixLabs",
+  "SDKVersion": 3,
+  "Software": {
+    "MinimumVersion": "7.1"
+  },
+  "Nodejs": {
+    "Version": "24"
+  },
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    },
+    {
+      "Platform": "mac",
+      "MinimumVersion": "13"
+    }
+  ],
+  "CodePath": "bin/plugin.js",
+  "Icon": "imgs/plugin/icon",
+  "Category": "Dot X",
+  "CategoryIcon": "imgs/plugin/icon",
+  "Actions": [
+    {
+      "UUID": "com.dotmatrixlabs.dotx.streamdeck.channel",
+      "Name": "Dot X Channel",
+      "Tooltip": "Displays a Dot X channel target and its live percentage while the slider moves.",
+      "Icon": "imgs/actions/channel/icon",
+      "PropertyInspectorPath": "ui/channel-key.html",
+      "Controllers": [
+        "Keypad"
+      ],
+      "UserTitleEnabled": false,
+      "States": [
+        {
+          "Image": "imgs/actions/channel/transparent",
+          "Title": "Dot X",
+          "TitleAlignment": "middle",
+          "FontSize": 10
+        }
+      ]
+    }
+  ]
+}

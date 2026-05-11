@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dot X Channel Settings</title>
+    <script src="sdpi-components.js"></script>
+  </head>
+  <body>
+    <sdpi-item label="Channel">
+      <sdpi-textfield
+        setting="channel"
+        type="number"
+        value="0"
+        pattern="[0-9]+"
+        placeholder="0">
+      </sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Display">
+      <sdpi-select setting="displayMode" default="first">
+        <option value="first">First target</option>
+        <option value="all">All targets</option>
+        <option value="custom">Custom label</option>
+      </sdpi-select>
+    </sdpi-item>
+
+    <sdpi-item label="Label">
+      <sdpi-textfield
+        setting="customLabel"
+        maxlength="34"
+        placeholder="Optional">
+      </sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Live value">
+      <sdpi-checkbox
+        setting="showPercentWhileMoving"
+        default
+        label="Show percentage while moving">
+      </sdpi-checkbox>
+    </sdpi-item>
+
+    <sdpi-item label="Hold">
+      <sdpi-range
+        setting="percentHoldMs"
+        min="250"
+        max="10000"
+        step="50"
+        default="1200"
+        showlabels>
+        <span slot="min">250 ms</span>
+        <span slot="max">10 s</span>
+      </sdpi-range>
+    </sdpi-item>
+  </body>
+</html>
