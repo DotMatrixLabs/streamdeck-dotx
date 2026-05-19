@@ -17,6 +17,20 @@
       </sdpi-textfield>
     </sdpi-item>
 
+    <sdpi-item label="On press">
+      <sdpi-select setting="mediaAction" default="none">
+        <option value="none">Do nothing</option>
+        <option value="toggle-mute">Toggle mute</option>
+        <option value="session-toggle-mute">Toggle session mute</option>
+        <option value="toggle">Toggle media play/pause</option>
+        <option value="session-toggle">Toggle session play/pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="next">Next Track</option>
+        <option value="prev">Previous Track</option>
+      </sdpi-select>
+    </sdpi-item>
+
     <sdpi-item label="Display">
       <sdpi-select setting="displayMode" default="first">
         <option value="first">First target</option>

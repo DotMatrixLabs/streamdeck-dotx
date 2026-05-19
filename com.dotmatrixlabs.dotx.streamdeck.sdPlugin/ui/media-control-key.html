@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dot X Media Control Settings</title>
+    <script src="sdpi-components.js"></script>
+  </head>
+  <body>
+    <sdpi-item label="Action">
+      <sdpi-select setting="mediaAction" default="toggle">
+        <option value="toggle">Toggle Play / Pause</option>
+        <option value="pause">Pause</option>
+        <option value="play">Play</option>
+        <option value="next">Next Track</option>
+        <option value="prev">Previous Track</option>
+        <option value="pause-all">Pause All Media</option>
+        <option value="mute">Mute System Audio</option>
+        <option value="unmute">Unmute System Audio</option>
+        <option value="toggle-mute">Toggle Mute</option>
+      </sdpi-select>
+    </sdpi-item>
+
+    <sdpi-item label="Label">
+      <sdpi-textfield
+        setting="customLabel"
+        maxlength="34"
+        placeholder="Optional">
+      </sdpi-textfield>
+    </sdpi-item>
+  </body>
+</html>

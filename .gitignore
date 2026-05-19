@@ -2,3 +2,4 @@ node_modules/
 dist/
 com.dotmatrixlabs.dotx.streamdeck.sdPlugin/bin/
 com.dotmatrixlabs.dotx.streamdeck.sdPlugin/logs/
+sidecar/target/

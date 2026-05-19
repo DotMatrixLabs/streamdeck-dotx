@@ -1,3 +1,5 @@
+import { execFile } from "child_process";
+import { join } from "path";
 import streamDeck, {
   action,
   SingletonAction,
@@ -9,10 +11,13 @@ import streamDeck, {
 } from "@elgato/streamdeck";
 import { dotxClient, type DeviceChanges, type DotXConnectionState } from "../dotx/dotx-client.js";
 import {
+  isSessionAction,
   normalizeChannelSettings,
   type ChannelKeySettings,
   type NormalizedChannelKeySettings,
 } from "./channel-settings.js";
+
+const SIDECAR = join(__dirname, "media-control.exe");
 
 const ACTION_UUID = "com.dotmatrixlabs.dotx.streamdeck.channel";
 const TARGET_REFRESH_MS = 10_000;
@@ -101,19 +106,21 @@ export class ChannelKeyAction extends SingletonAction<ChannelKeySettings> {
 
   override async onKeyDown(ev: KeyDownEvent<ChannelKeySettings>): Promise<void> {
     const settings = normalizeChannelSettings(ev.payload.settings);
-    const visible = this.visible.get(ev.action.id);
-    const devices = dotxClient.getState() === "connected"
-      ? await dotxClient.getConnectedDevices().catch(() => [])
-      : [];
+    if (settings.mediaAction === "none") {
+      return;
+    }
 
-    streamDeck.logger.info("[Dot X Stream Deck] key press", {
-      timestamp: new Date().toISOString(),
-      actionContext: ev.action.id,
-      channel: settings.channel,
-      targets: visible?.targets ?? [],
-      currentValue: visible?.currentValue,
-      connectionState: dotxClient.getState(),
-      devices,
+    // Session actions target the first app assigned to this channel.
+    const target = isSessionAction(settings.mediaAction)
+      ? (this.visible.get(ev.action.id)?.targets[0] ?? "")
+      : undefined;
+
+    await runSidecar(settings.mediaAction, target).catch((err) => {
+      streamDeck.logger.warn("[Dot X Stream Deck] Media control error", {
+        action: settings.mediaAction,
+        target,
+        error: err instanceof Error ? err.message : String(err),
+      });
     });
   }
 
@@ -247,6 +254,16 @@ export class ChannelKeyAction extends SingletonAction<ChannelKeySettings> {
       }
     }, TARGET_REFRESH_MS);
   }
+}
+
+function runSidecar(command: string, target?: string): Promise<void> {
+  const args = target ? [command, target] : [command];
+  return new Promise((resolve, reject) => {
+    execFile(SIDECAR, args, { timeout: 5000 }, (err) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
 }
 
 function truncateTitle(title: string): string {
