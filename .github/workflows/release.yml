@@ -1,0 +1,107 @@
+name: Release Stream Deck plugin
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version, without the leading v"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Resolve release version
+        id: release
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $version = "${{ inputs.version }}"
+          } else {
+            $version = "${{ github.ref_name }}" -replace '^v', ''
+          }
+
+          if ($version -notmatch '^\d+\.\d+\.\d+$') {
+            throw "Version must use major.minor.patch format, got '$version'."
+          }
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          "manifest_version=$version.0" >> $env:GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Stamp package and manifest versions
+        shell: pwsh
+        run: |
+          node -e @'
+          const { readFileSync, writeFileSync } = require("node:fs");
+
+          const packagePath = "package.json";
+          const manifestPath = "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/manifest.json";
+          const packageVersion = process.env.RELEASE_VERSION;
+          const manifestVersion = process.env.MANIFEST_VERSION;
+
+          for (const [path, version] of [[packagePath, packageVersion], [manifestPath, manifestVersion]]) {
+            const json = JSON.parse(readFileSync(path, "utf8"));
+            json.Version = json.Version ?? undefined;
+            if (path.endsWith("package.json")) {
+              json.version = version;
+              delete json.Version;
+            } else {
+              json.Version = version;
+            }
+            writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
+          }
+          '@
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          MANIFEST_VERSION: ${{ steps.release.outputs.manifest_version }}
+
+      - name: Build plugin and sidecar
+        run: npm run build:sidecar
+
+      - name: Validate plugin
+        run: npm run validate
+
+      - name: Pack plugin
+        run: npx streamdeck pack com.dotmatrixlabs.dotx.streamdeck.sdPlugin --output dist --force
+
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          $artifact = Get-ChildItem -Path dist -Filter *.streamDeckPlugin | Select-Object -First 1
+          if (-not $artifact) {
+            throw "No .streamDeckPlugin artifact found in dist."
+          }
+
+          if (gh release view $env:RELEASE_TAG *> $null) {
+            gh release upload $env:RELEASE_TAG $artifact.FullName --clobber
+          } else {
+            gh release create $env:RELEASE_TAG $artifact.FullName --target $env:GITHUB_SHA --title "Dot X $env:RELEASE_TAG" --notes "Dot X Stream Deck plugin $env:RELEASE_TAG."
+          }
