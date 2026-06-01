@@ -16,10 +16,6 @@
     {
       "Platform": "windows",
       "MinimumVersion": "10"
-    },
-    {
-      "Platform": "mac",
-      "MinimumVersion": "13"
     }
   ],
   "CodePath": "bin/plugin.js",
