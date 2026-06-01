@@ -4,6 +4,7 @@ export type ChannelDisplayMode = "first" | "all" | "custom";
 
 export type MediaAction =
   | "none"
+  | "session-toggle-mute"
   | "toggle-mute"
   | "toggle"
   | "next"
@@ -47,11 +48,16 @@ export function normalizeChannelSettings(settings?: ChannelKeySettings): Normali
 function isMediaAction(value: unknown): value is MediaAction {
   return (
     value === "none" ||
+    value === "session-toggle-mute" ||
     value === "toggle-mute" ||
     value === "toggle" ||
     value === "next" ||
     value === "prev"
   );
+}
+
+export function isSessionMuteAction(action: MediaAction): boolean {
+  return action === "session-toggle-mute";
 }
 
 function toInteger(value: unknown, fallback: number, min: number, max: number): number {

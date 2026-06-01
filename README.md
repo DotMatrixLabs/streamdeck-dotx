@@ -1,6 +1,6 @@
 # Dot X Stream Deck
 
-Standalone Elgato Stream Deck plugin for Dot X. Each Stream Deck key can be mapped to a Dot X channel, show the channel target, temporarily show the live slider percentage while moving, and log a structured entry when pressed.
+Standalone Elgato Stream Deck plugin for Dot X. Each Stream Deck key can be mapped to a Dot X channel, show the channel target, temporarily show the live slider percentage while moving, and react when buttons are pressed.
 
 ## Requirements
 
@@ -48,5 +48,3 @@ dist/com.dotmatrixlabs.dotx.streamdeck.streamDeckPlugin
 ## Notes
 
 Dot X may start the plugin server on another port if `3001` is busy. The Stream Deck plugin automatically probes `127.0.0.1:3001-3099` and reuses the last working port.
-
-The property inspector uses Elgato's standard `sdpi-components` controls, bundled locally in the plugin package.
