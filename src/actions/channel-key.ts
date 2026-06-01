@@ -11,7 +11,6 @@ import streamDeck, {
 } from "@elgato/streamdeck";
 import { dotxClient, type DeviceChanges, type DotXConnectionState } from "../dotx/dotx-client.js";
 import {
-  isSessionAction,
   normalizeChannelSettings,
   type ChannelKeySettings,
   type NormalizedChannelKeySettings,
@@ -110,15 +109,9 @@ export class ChannelKeyAction extends SingletonAction<ChannelKeySettings> {
       return;
     }
 
-    // Session actions target the first app assigned to this channel.
-    const target = isSessionAction(settings.mediaAction)
-      ? (this.visible.get(ev.action.id)?.targets[0] ?? "")
-      : undefined;
-
-    await runSidecar(settings.mediaAction, target).catch((err) => {
+    await runSidecar(settings.mediaAction).catch((err) => {
       streamDeck.logger.warn("[Dot X Stream Deck] Media control error", {
         action: settings.mediaAction,
-        target,
         error: err instanceof Error ? err.message : String(err),
       });
     });
@@ -256,10 +249,9 @@ export class ChannelKeyAction extends SingletonAction<ChannelKeySettings> {
   }
 }
 
-function runSidecar(command: string, target?: string): Promise<void> {
-  const args = target ? [command, target] : [command];
+function runSidecar(command: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    execFile(SIDECAR, args, { timeout: 5000 }, (err) => {
+    execFile(SIDECAR, [command], { timeout: 5000 }, (err) => {
       if (err) reject(err);
       else resolve();
     });
