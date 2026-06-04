@@ -5,7 +5,8 @@ import sharp from "sharp";
 const files = [
   ["src/ui/channel-key.html", "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/ui/channel-key.html"],
   ["src/ui/sdpi-components.js", "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/ui/sdpi-components.js"],
-  ["src/ui/dot-x.svg", "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/imgs/actions/channel/icon.svg"],
+  ["src/ui/no-bg.svg", "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/imgs/actions/category/icon.svg"],
+  ["src/ui/no-bg.svg", "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/imgs/actions/channel/icon.svg"],
   ["src/ui/transparent-key.svg", "com.dotmatrixlabs.dotx.streamdeck.sdPlugin/imgs/actions/channel/transparent.svg"],
 ];
 

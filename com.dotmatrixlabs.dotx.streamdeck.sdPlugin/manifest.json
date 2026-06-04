@@ -21,7 +21,7 @@
   "CodePath": "bin/plugin.js",
   "Icon": "imgs/plugin/icon",
   "Category": "Dot X",
-  "CategoryIcon": "imgs/plugin/icon",
+  "CategoryIcon": "imgs/actions/category/icon",
   "Actions": [
     {
       "UUID": "com.dotmatrixlabs.dotx.streamdeck.channel",
