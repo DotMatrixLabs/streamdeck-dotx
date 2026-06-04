@@ -3,7 +3,7 @@
   "UUID": "com.dotmatrixlabs.dotx.streamdeck",
   "Name": "Dot X",
   "Description": "Show Dot X channel targets and live channel percentages on Stream Deck keys.",
-  "Version": "0.1.1.0",
+  "Version": "0.1.0.0",
   "Author": "DotMatrixLabs",
   "SDKVersion": 3,
   "Software": {
