@@ -2,6 +2,17 @@
 
 Standalone Elgato Stream Deck plugin for Dot X. Each Stream Deck key can be mapped to a Dot X channel, show the channel target, temporarily show the live slider percentage while moving, and react when buttons are pressed.
 
+## About
+
+Stream Deck plugin for [Dot X](https://dotmatrixlabs.com). Maps Stream Deck keys to Dot X channels and displays live channel information.
+
+Includes one action: **Dot X Channel**.
+
+- Shows the channel's target label on the key. Display modes: first target, all targets, or a custom label.
+- Optionally shows the live slider percentage while a channel is being adjusted, then returns to the label after a configurable hold time (250 ms – 10 s).
+- Optionally triggers a media action on key press: play/pause, next track, previous track, mute, or mute the channel's audio session.
+- Connects to Dot X over a local WebSocket. Automatically discovers the port Dot X is running on (3001–3099). Shows "offline" or "connecting" on the key when Dot X is unreachable.
+
 ## Requirements
 
 - Dot X running locally with the plugin server enabled.
